@@ -46,7 +46,7 @@ static uint8_t workBuffer[BSEC_MAX_WORKBUFFER_SIZE];
 Bsec2::Bsec2(void)
 {
     ovfCounter = 0;
-    lastMillis = 0;
+    //lastMillis = 0;
     status = BSEC_OK;
 	extTempOffset = 0.0f;
     opMode = BME68X_SLEEP_MODE;
@@ -64,7 +64,7 @@ Bsec2::Bsec2(void)
 bool Bsec2::begin(bme68xIntf intf, bme68x_read_fptr_t read, bme68x_write_fptr_t write,
         bme68x_delay_us_fptr_t idleTask, void *intfPtr, unsigned long (*millis)())
 {
-    bsecMillis = millis;
+    //bsecMillis = millis;
     sensor.begin(intf, read, write, idleTask, intfPtr);
 
     if (sensor.checkStatus() == BME68X_ERROR)
@@ -80,7 +80,7 @@ bool Bsec2::begin(bme68xIntf intf, bme68x_read_fptr_t read, bme68x_write_fptr_t 
 bool Bsec2::begin(bme68xIntf intf, bme68x_read_fptr_t read, bme68x_write_fptr_t write,
         bme68x_delay_us_fptr_t idleTask, void *intfPtr)
 {
-    bsecMillis = millis;
+    //bsecMillis = millis;
     sensor.begin(intf, read, write, idleTask, intfPtr);
 
     if (sensor.checkStatus() == BME68X_ERROR)
@@ -94,7 +94,7 @@ bool Bsec2::begin(bme68xIntf intf, bme68x_read_fptr_t read, bme68x_write_fptr_t 
  */ 
 bool Bsec2::begin(uint8_t i2cAddr, TwoWire &i2c, bme68x_delay_us_fptr_t idleTask)
 {
-    bsecMillis = millis;
+    //bsecMillis = millis;
     sensor.begin(i2cAddr, i2c, idleTask);
 
     if (sensor.checkStatus() == BME68X_ERROR)
@@ -108,7 +108,7 @@ bool Bsec2::begin(uint8_t i2cAddr, TwoWire &i2c, bme68x_delay_us_fptr_t idleTask
  */
 bool Bsec2::begin(uint8_t chipSelect, SPIClass &spi, bme68x_delay_us_fptr_t idleTask)
 {
-    bsecMillis = millis;
+    //bsecMillis = millis;
     sensor.begin(chipSelect, spi, idleTask);
 
     if (sensor.checkStatus() == BME68X_ERROR)
@@ -147,7 +147,7 @@ bool Bsec2::run(void)
 {
     uint8_t nFieldsLeft = 0;
     bme68xData data;
-    int64_t currTimeNs = getTimeMs() * INT64_C(1000000);
+    int64_t currTimeNs = bsecMicros() * INT64_C(1000);
     opMode = bmeConf.op_mode;
 
     if (currTimeNs >= bmeConf.next_call)
@@ -267,21 +267,9 @@ bool Bsec2::setConfig(const uint8_t *config)
 }
 
 /**
- * @brief Function to calculate an int64_t timestamp in milliseconds
+ * Function to calculate an int64_t timestamp in milliseconds
  */
-int64_t Bsec2::getTimeMs(void)
-{
-    int64_t timeMs = bsecMillis();
-
-    if (lastMillis > timeMs) /* An overflow occurred */
-    { 
-        ovfCounter++;
-    }
-
-    lastMillis = timeMs;
-
-    return timeMs + (ovfCounter * INT64_C(0xFFFFFFFF));
-}
+//not needed as we moved to int64 for millis
 
 /**
  * @brief Function to assign the memory block to the bsec instance
