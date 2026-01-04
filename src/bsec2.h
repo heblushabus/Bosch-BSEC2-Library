@@ -235,6 +235,9 @@ public:
      */
     void clearMemory(void);
 
+    int64_t (*bsecMillis)();
+    int64_t (*bsecMicros)();
+
 private:
     bsec_bme_settings_t bmeConf;
 
@@ -248,9 +251,6 @@ private:
     /** Global variables to help create a millisecond timestamp that doesn't overflow every 51 days.
      * If it overflows, it will have a negative value. Something that should never happen.
      */
-    
-    int64_t (*bsecMillis)();
-    int64_t (*bsecMicros)();
 
     /* Pointer to hold the address of the instance */
     uint8_t *bsecInstance;
