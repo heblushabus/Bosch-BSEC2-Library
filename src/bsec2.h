@@ -248,11 +248,10 @@ private:
     /** Global variables to help create a millisecond timestamp that doesn't overflow every 51 days.
      * If it overflows, it will have a negative value. Something that should never happen.
      */
-    uint32_t ovfCounter;
     
-    unsigned long (*bsecMillis)();
+    int64_t (*bsecMillis)();
+    int64_t (*bsecMicros)();
 
-    uint32_t lastMillis;
     /* Pointer to hold the address of the instance */
     uint8_t *bsecInstance;
 
